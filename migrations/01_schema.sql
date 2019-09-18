@@ -22,7 +22,7 @@ CREATE TABLE properties (
   description TEXT,
   thumbnail_photo_url VARCHAR(255) NOT NULL,
   cover_photo_url VARCHAR(255) NOT NULL,
-  cost_per_nigth SMALLINT NOT NULL DEFAULT 0,
+  cost_per_night SMALLINT NOT NULL DEFAULT 0,
   parking_spaces SMALLINT NOT NULL DEFAULT 0,
   number_of_bathrooms SMALLINT NOT NULL DEFAULT 0,
   number_of_bedrooms SMALLINT NOT NULL DEFAULT 0,
@@ -37,16 +37,16 @@ CREATE TABLE properties (
 
 CREATE TABLE rates (
   id SERIAL PRIMARY KEY,
-  start_date TIMESTAMP,
-  end_date TIMESTAMP,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
   cost_per_night INTEGER NOT NULL,
   property_id INTEGER NOT NULL REFERENCES properties(id) ON DELETE CASCADE
 );
 
 CREATE TABLE reservations (
   id SERIAL PRIMARY KEY NOT NULL,
-  start_date TIMESTAMP NOT NULL,
-  end_date TIMESTAMP NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
   property_id INTEGER NOT NULL REFERENCES properties(id) ON DELETE CASCADE,
   guest_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
