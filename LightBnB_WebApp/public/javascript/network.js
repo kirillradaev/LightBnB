@@ -29,6 +29,7 @@ function signUp(data) {
 }
 
 function getAllListings(params) {
+  console.log('get all listing ', params)
   let url = "/api/properties";
   if (params) {
     url += "?" + params;
