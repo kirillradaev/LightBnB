@@ -1,13 +1,5 @@
-const properties = require('./json/properties.json');
-const users = require('./json/users.json');
-const {Pool} = require('pg');
+const db = require ('../db/index.js');
 
-const pool = new Pool({
-  user: 'vagrant',
-  password: '123',
-  host: 'localhost',
-  database: 'lightbnb'
-});
 /// Users
 
 /**
@@ -21,7 +13,7 @@ const getUserWithEmail = function(email) {
     SELECT * FROM users
     WHERE email = $1
   `;
-  return pool.query(queryString, values)
+  return db.pool.query(queryString, values)
     .then(res => res.rows[0])
     .catch(err => console.log(err, stack));
   }
@@ -41,7 +33,7 @@ const getUserWithId = function(id) {
     SELECT * FROM users
     WHERE id = $1
   `;
-  return pool.query(queryString, values)
+  return db.pool.query(queryString, values)
     .then(res => res.rows[0])
     .catch(err => console.log(err, stack));
   }
@@ -61,7 +53,7 @@ const addUser =  function(user) {
     VALUES ($1, $2, $3)
     RETURNING * ;
   `;
-  return pool.query(queryString, values)
+  return db.pool.query(queryString, values)
     .then(res => res.rows[0])
     .catch(err => console.log(err, stack));
   }
@@ -87,7 +79,7 @@ const getAllReservations = function(guest_id, limit = 10) {
     ORDER BY reservations.start_date
     LIMIT $2;
   `;
-  return pool.query(queryString, values)
+  return db.pool.query(queryString, values)
     .then(res => res.rows)
     .catch(err => console.log(err, stack));
   }
@@ -147,12 +139,9 @@ const getAllProperties = function(options, limit = 10) {
   queryParams.push(limit);
   queryString += ` ORDER BY cost_per_night LIMIT $${queryParams.length};`;
 
-  // 5
-  // console.log(queryString, queryParams);
 
   // 6
-  console.log('QUERY GetallProperties ', queryString, ' PARAMS: ', queryParams)
-  return pool.query(queryString, queryParams)
+  return db.pool.query(queryString, queryParams)
   .then(res => res.rows);
 }
 exports.getAllProperties = getAllProperties;
@@ -172,8 +161,7 @@ const addProperty = function(property) {
     ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
     RETURNING *;
   `;
-  console.log(queryString);
-  return pool.query(queryString, values)
+  return db.pool.query(queryString, values)
     .then(res => res.rows[0])
     .catch(err => console.log(err, stack));
   }
